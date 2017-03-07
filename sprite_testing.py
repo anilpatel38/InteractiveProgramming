@@ -1,4 +1,5 @@
 import pygame
+import math
 
 
 class player(pygame.sprite.Sprite):
@@ -22,7 +23,7 @@ class player(pygame.sprite.Sprite):
             self.x = self.x - 10
 
         if key == 'up':
-            self.y = self.y + 10
+            self.y = self. y + 10
 
         if key == 'down':
             self.y = self.y - 10
@@ -33,11 +34,14 @@ class player(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
 
+    speed = 10
+
     # initialize the bullet
     def __init__(self, surface, player):
         pygame.sprite.Sprite.__init__(self)
         self.x = player.x
         self.y = player.y
+        self.dy
         self.image = surface
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -45,6 +49,11 @@ class Bullet(pygame.sprite.Sprite):
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
+
+    def is_colliding(self):
+        if self.y >= 550 or self.y <= 0:
+            return True
+        return False
 
 
 if __name__ == "__main__":
@@ -92,8 +101,9 @@ if __name__ == "__main__":
         for bullet in p1_bullets:
             if bullet.x > 800:
                 p1_bullets.remove(bullet)
-            bullet.x += 0.5
-            bullet.y += 0.025
+            bullet.x += 1
+            bullet.y += 0.25
+            screen.blit(scaled_img, (0, 0))
             bullet.draw()
 
         player1.draw()
@@ -141,7 +151,6 @@ if __name__ == "__main__":
             if keys[pygame.K_m]:
                 bullet = Bullet(bulletbill, player2)
                 p1_bullets.append(bullet)
-                screen.blit(scaled_img, (0, 0))
 
         pygame.display.update()
 
