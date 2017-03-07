@@ -41,7 +41,6 @@ class Bullet(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = player.x
         self.y = player.y
-        self.dy
         self.image = surface
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -98,12 +97,12 @@ if __name__ == "__main__":
     # define game
     while running:
         # draw players every update
+        screen.blit(scaled_img, (0, 0))
         for bullet in p1_bullets:
             if bullet.x > 800:
                 p1_bullets.remove(bullet)
             bullet.x += 1
             bullet.y += 0.25
-            screen.blit(scaled_img, (0, 0))
             bullet.draw()
 
         player1.draw()
@@ -122,30 +121,22 @@ if __name__ == "__main__":
             # Player 1 events
             if keys[pygame.K_RIGHT]:
                 player1.step('right')
-                screen.blit(scaled_img, (0, 0))
             if keys[pygame.K_LEFT]:
                 player1.step('left')
-                screen.blit(scaled_img, (0, 0))
             if keys[pygame.K_UP]:
                 player1.step('down')
-                screen.blit(scaled_img, (0, 0))
             if keys[pygame.K_DOWN]:
                 player1.step('up')
-                screen.blit(scaled_img, (0, 0))
 
             # Player 2 events
             if keys[pygame.K_d]:
                 player2.step('right')
-                screen.blit(scaled_img, (0, 0))
             if keys[pygame.K_a]:
                 player2.step('left')
-                screen.blit(scaled_img, (0, 0))
             if keys[pygame.K_w]:
                 player2.step('down')
-                screen.blit(scaled_img, (0, 0))
             if keys[pygame.K_s]:
                 player2.step('up')
-                screen.blit(scaled_img, (0, 0))
 
             # Bullet Events
             if keys[pygame.K_m]:
