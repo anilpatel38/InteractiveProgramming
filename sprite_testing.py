@@ -36,13 +36,17 @@ class player(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
 
     # initialize the bullet
-    def __init__(self, surface, player, dx=0.5, dy=-0.0, speed=1):
+    def __init__(self, surface, player, speed=1):
         pygame.sprite.Sprite.__init__(self)
         self.x = player.x
         self.y = player.y
         self.speed = speed
-        self.dx = dx*self.speed
-        self.dy = dy*self.speed
+        if player.x > 400:
+            self.dx = random.randrange(-50, 0)/50*self.speed
+            self.dy = random.randrange(-50, 50)/50*self.speed
+        elif player.x < 400:
+            self.dx = random.randrange(0, 50)/50*self.speed
+            self.dy = random.randrange(-50, 50)/50*self.speed
         self.image = surface
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -52,13 +56,12 @@ class Bullet(pygame.sprite.Sprite):
         screen.blit(self.image, (self.x, self.y))
 
     def is_colliding(self):
-        if self.y <= 5 or self.y >= 550 or self.x == 400:
+        if self.y <= 5 or self.y >= 595:
             return True
         return False
 
     def collision(self):
-        self.dy = random.randrange(-1, 1)
-        self.dx = random.randrange(-1, 1)
+        self.dy = self.dy*-1
 
 
 if __name__ == "__main__":
@@ -105,7 +108,7 @@ if __name__ == "__main__":
         # draw players every update
         screen.blit(scaled_img, (0, 0))
         for bullet in p1_bullets:
-            if bullet.x > 800:
+            if bullet.x > 800 or bullet.x < 0:
                 p1_bullets.remove(bullet)
             if bullet.is_colliding():
                 bullet.collision()
