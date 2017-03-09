@@ -42,11 +42,11 @@ class Bullet(pygame.sprite.Sprite):
         self.y = player.y
         self.speed = speed
         if player.x > 400:
-            self.dx = random.randrange(-50, 0)/50*self.speed
-            self.dy = random.randrange(-50, 50)/50*self.speed
+            self.dx = random.randrange(-5, -1)*self.speed
+            self.dy = random.randrange(-10, 10)/50*self.speed
         elif player.x < 400:
-            self.dx = random.randrange(0, 50)/50*self.speed
-            self.dy = random.randrange(-50, 50)/50*self.speed
+            self.dx = random.randrange(1, 5)*self.speed
+            self.dy = random.randrange(-10, 10)/10*self.speed
         self.image = surface
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -119,6 +119,7 @@ if __name__ == "__main__":
 
     # define startup as running
     running = True
+    endgame = False
     pygame.key.set_repeat(500, 30)
 
     # define game
@@ -127,7 +128,8 @@ if __name__ == "__main__":
         screen.blit(scaled_img, (0, 0))
         for bullet in p1_bullets:
             if bullet.is_hit(player1):
-                print('Hit!')
+                running = False
+                endgame = True
             if bullet.x > 800 or bullet.x < 0:
                 p1_bullets.remove(bullet)
             if bullet.is_colliding():
@@ -176,5 +178,15 @@ if __name__ == "__main__":
                 p1_bullets.append(bullet)
 
         pygame.display.update()
+
+    while endgame:
+        screen.fill((0, 0, 0))
+        gameover = pygame.image.load('gameover.jpg')
+        screen.blit(gameover, (100, 200))
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                endgame = False
 
     pygame.quit()
