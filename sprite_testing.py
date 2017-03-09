@@ -1,5 +1,6 @@
 import pygame
-import math
+# import math
+import random
 
 
 class player(pygame.sprite.Sprite):
@@ -34,13 +35,14 @@ class player(pygame.sprite.Sprite):
 
 class Bullet(pygame.sprite.Sprite):
 
-    speed = 10
-
     # initialize the bullet
-    def __init__(self, surface, player):
+    def __init__(self, surface, player, dx=0.5, dy=-0.0, speed=1):
         pygame.sprite.Sprite.__init__(self)
         self.x = player.x
         self.y = player.y
+        self.speed = speed
+        self.dx = dx*self.speed
+        self.dy = dy*self.speed
         self.image = surface
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -50,9 +52,13 @@ class Bullet(pygame.sprite.Sprite):
         screen.blit(self.image, (self.x, self.y))
 
     def is_colliding(self):
-        if self.y >= 550 or self.y <= 0:
+        if self.y <= 5 or self.y >= 550 or self.x == 400:
             return True
         return False
+
+    def collision(self):
+        self.dy = random.randrange(-1, 1)
+        self.dx = random.randrange(-1, 1)
 
 
 if __name__ == "__main__":
@@ -101,8 +107,11 @@ if __name__ == "__main__":
         for bullet in p1_bullets:
             if bullet.x > 800:
                 p1_bullets.remove(bullet)
-            bullet.x += 1
-            bullet.y += 0.25
+            if bullet.is_colliding():
+                bullet.collision()
+                print('collision!')
+            bullet.x += bullet.dx
+            bullet.y += bullet.dy
             bullet.draw()
 
         player1.draw()
