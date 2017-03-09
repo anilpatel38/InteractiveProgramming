@@ -55,6 +55,24 @@ class Bullet(pygame.sprite.Sprite):
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
 
+    def is_hit(self, player):
+        bulletx = []
+        playerx = []
+        bullety = []
+        playery = []
+        for i in range(int(self.x)-5, int(self.x) + 5):
+            bulletx.append(i)
+        for j in range(int(player.x)-25, int(player.x)+25):
+            playerx.append(j)
+        for l in range(int(self.y)-5, int(self.y) + 5):
+            bullety.append(l)
+        for m in range(int(player.y)-25, int(player.y)+25):
+            playery.append(m)
+        for i in range(0, len(bulletx)):
+            if bulletx[i] in playerx and bullety[i] in playery:
+                return True
+        return False
+
     def is_colliding(self):
         if self.y <= 5 or self.y >= 595:
             return True
@@ -108,6 +126,8 @@ if __name__ == "__main__":
         # draw players every update
         screen.blit(scaled_img, (0, 0))
         for bullet in p1_bullets:
+            if bullet.is_hit(player1):
+                print('Hit!')
             if bullet.x > 800 or bullet.x < 0:
                 p1_bullets.remove(bullet)
             if bullet.is_colliding():
