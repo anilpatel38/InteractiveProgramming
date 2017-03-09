@@ -17,17 +17,18 @@ class player(pygame.sprite.Sprite):
 
     # define steps
     def step(self, key):
-        if key == 'right':
-            self.x = self.x + 10
-
-        if key == 'left':
-            self.x = self.x - 10
-
-        if key == 'up':
-            self.y = self. y + 10
-
-        if key == 'down':
-            self.y = self.y - 10
+        if self.x < 750:
+            if key == 'right':
+                self.x = self.x + 10
+        if self.x > 50:
+            if key == 'left':
+                self.x = self.x - 10
+        if self.y > 575:
+            if key == 'up':
+                self.y = self. y + 10
+        if self.y > 25:
+            if key == 'down':
+                self.y = self.y - 10
 
     def draw(self):
         screen.blit(self.image, (self.x, self.y))
@@ -42,13 +43,13 @@ class Bullet(pygame.sprite.Sprite):
         self.y = player.y
         self.speed = speed
         if player.x > 400:
-            self.dx = random.randrange(-50, 0)/50*self.speed
-            self.dy = random.randrange(-50, 50)/50*self.speed
             self.image = bulletbill1
+            self.dx = random.randrange(-5, -1)*self.speed
+            self.dy = random.randrange(-10, 10)/50*self.speed
         elif player.x < 400:
-            self.dx = random.randrange(0, 50)/50*self.speed
-            self.dy = random.randrange(-50, 50)/50*self.speed
             self.image = bulletbill
+            self.dx = random.randrange(1, 5)*self.speed
+            self.dy = random.randrange(-10, 10)/10*self.speed
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
         self.pos = [self.x, self.y]
@@ -113,7 +114,7 @@ if __name__ == "__main__":
     bulletbill = pygame.image.load('images\shot.png')
     bulletbill = pygame.transform.scale(bulletbill, (bull_scale, bull_scale))
     bulletbill1 = pygame.image.load('images\shot(ROT_LEFT)')
-    bulletbill1 = pygame.transform.scale(bulletbill1, (bull_scale, bull_scale))
+    bulletbill1 = pygame.transform.scale(bulletbill, (bull_scale, bull_scale))
     player1 = player(ship, p1_spawnx, p1_spawny)
     player2 = player(elephant, p2_spawnx, p2_spawny)
     p1_bullets = []
@@ -121,6 +122,7 @@ if __name__ == "__main__":
 
     # define startup as running
     running = True
+    endgame = False
     pygame.key.set_repeat(500, 30)
     timer = 0
     timer1 = 0
@@ -129,8 +131,9 @@ if __name__ == "__main__":
         # draw players every update
         screen.blit(scaled_img, (0, 0))
         for bullet in p1_bullets:
-            if bullet.is_hit(player1):
-                print('Hit!')
+            if bullet.is_hit(player2):
+                running = False
+                endgame = True
             if bullet.x > 800 or bullet.x < 0:
                 p1_bullets.remove(bullet)
             if bullet.is_colliding():
@@ -139,15 +142,17 @@ if __name__ == "__main__":
             bullet.x += bullet.dx
             bullet.y += bullet.dy
             bullet.draw()
+
         for bullet in p2_bullets:
-            if bullet.is_hit(player2):
-                print('Hit!')
+            if bullet.is_hit(player1):
+                running = False
+                endgame = True
             if bullet.x > 800 or bullet.x < 0:
                 p2_bullets.remove(bullet)
             if bullet.is_colliding():
                 bullet.collision()
                 print('collision!')
-            bullet.x -= bullet.dx
+            bullet.x += bullet.dx
             bullet.y += bullet.dy
             bullet.draw()
 
@@ -185,6 +190,7 @@ if __name__ == "__main__":
                 player2.step('up')
 
             # Bullet Events
+            # Bullet Events
             if keys[pygame.K_m] and timer < 0:
                 bullet = Bullet(player1)
                 p1_bullets.append(bullet)
@@ -193,8 +199,19 @@ if __name__ == "__main__":
                 bullet = Bullet(player2)
                 p2_bullets.append(bullet)
                 timer1 = 75
+
         timer -= 1
         timer1 -= 1
         pygame.display.update()
+
+    while endgame:
+        screen.fill((0, 0, 0))
+        gameover = pygame.image.load('gameover.jpg')
+        screen.blit(gameover, (100, 200))
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                endgame = False
 
     pygame.quit()
