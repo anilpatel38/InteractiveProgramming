@@ -17,17 +17,17 @@ class player(pygame.sprite.Sprite):
 
     # define steps
     def step(self, key):
-        if self.x < 750:
+        if self.x < 725:
             if key == 'right':
                 self.x = self.x + 10
-        if self.x > 50:
+        if self.x > 5:
             if key == 'left':
                 self.x = self.x - 10
-        if self.y > 575:
-            if key == 'up':
-                self.y = self. y + 10
-        if self.y > 25:
+        if self.y < 525:
             if key == 'down':
+                self.y = self. y + 10
+        if self.y > 5:
+            if key == 'up':
                 self.y = self.y - 10
 
     def draw(self):
@@ -44,11 +44,11 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = speed
         if player.x > 400:
             self.image = bulletbill1
-            self.dx = random.randrange(-5, -1)*self.speed
+            self.dx = random.randrange(-3, -1)*self.speed
             self.dy = random.randrange(-10, 10)/50*self.speed
         elif player.x < 400:
             self.image = bulletbill
-            self.dx = random.randrange(1, 5)*self.speed
+            self.dx = random.randrange(1, 3)*self.speed
             self.dy = random.randrange(-10, 10)/10*self.speed
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
@@ -175,9 +175,9 @@ if __name__ == "__main__":
             if keys[pygame.K_LEFT]:
                 player1.step('left')
             if keys[pygame.K_UP]:
-                player1.step('down')
-            if keys[pygame.K_DOWN]:
                 player1.step('up')
+            if keys[pygame.K_DOWN]:
+                player1.step('down')
 
             # Player 2 events
             if keys[pygame.K_d]:
@@ -185,9 +185,9 @@ if __name__ == "__main__":
             if keys[pygame.K_a]:
                 player2.step('left')
             if keys[pygame.K_w]:
-                player2.step('down')
-            if keys[pygame.K_s]:
                 player2.step('up')
+            if keys[pygame.K_s]:
+                player2.step('down')
 
             # Bullet Events
             # Bullet Events
